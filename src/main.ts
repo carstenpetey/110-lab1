@@ -1,26 +1,13 @@
 import Konva from 'konva';
 
-// first we need to create a stage
 const stage = new Konva.Stage({
   container: 'container',
   width: window.innerWidth,
   height: window.innerHeight
 });
 
-// then create layer
 const layer = new Konva.Layer();
 stage.add(layer);
-
-// create our shape
-/*const circle = new Konva.Circle({
-  x: stage.width() / 2,
-  y: stage.height() / 2,
-  radius: 70,
-  fill: 'red',
-  stroke: 'black',
-  strokeWidth: 4
-});
-*/
 
 const start_x  = stage.width() / 2;
 const start_y = stage.height() / 2;
@@ -32,12 +19,39 @@ const blob = new Konva.Line({
   strokeWidth: 10,
   fill: '#d7f749ff',
   closed: true,
-  tension: .6
+  tension: .6,
+  draggable: true,
+  offsetX: start_x + 65,
+  offsetY: start_y + 15 
 })
 
-// add the shape to the layer
+blob.x(start_x + 65);
+blob.y(start_y + 15);
+
+blob.on('mouseover', function (e) {
+  e.target.getStage().container().style.cursor = 'pointer';
+});
+
+blob.on('mouseout', function (e) {
+  e.target.getStage().container().style.cursor = 'default';
+});
+
 layer.add(blob);
 
-// add the layer to the stage
 stage.add(layer);
 
+blob.on('mousedown', function (e) { 
+  blob.to({
+    scaleX: 1.1,
+    scaleY: 1.1,
+    duration: 0.2
+  });
+});
+
+blob.on('mouseup', function (e) {
+ blob.to({
+    scaleX: 1,
+    scaleY: 1,
+    duration: 0.2
+  }); 
+})
